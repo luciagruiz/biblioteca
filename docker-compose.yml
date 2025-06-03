@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: biblioteca
+    image: luciagruiz/biblioteca:${VERSION_BIBLIOTECA}
+    restart: always
+    environment:
+      BASE_URL: ${BASE_URL}
+      HOST: ${HOST}
+      USER: ${USER}
+      PASS: ${PASS}
+      DB: ${DB}
+      CHARSET: "charset=utf8"
+    ports:
+      - ${PUERTO}:80
+    volumes:
+      - biblioteca_logs:/var/log/apache2
+    depends_on:
+      - db
+
+  db:
+    container_name: biblioteca_db
+    image: mariadb:${VERSION_MARIADB}
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - biblioteca_data:/var/lib/mysql
+
+volumes:
+  biblioteca_data:
+  biblioteca_logs:

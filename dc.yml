@@ -1,0 +1,32 @@
+services:
+  app:
+    container_name: biblioteca
+    image: luciagruiz/biblioteca:v1
+    restart: always
+    environment:
+      BASE_URL: http://172.22.200.140:8080/
+      HOST: biblioteca_db
+      USER: usuario
+      PASS: passw
+      DB: biblioteca
+      CHARSET: "charset=utf8"
+    ports:
+      - 8080:80
+    volumes:
+      - biblioteca_logs:/var/log/apache2
+    depends_on:
+      - db
+  db:
+    container_name: biblioteca_db
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_DATABASE: biblioteca
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: passw
+      MYSQL_ROOT_PASSWORD: passw
+    volumes:
+      - biblioteca_data:/var/lib/mysql
+volumes:
+    biblioteca_data:
+    biblioteca_logs:
